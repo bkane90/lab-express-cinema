@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 const logger = require("morgan");
 const path = require("path");
 const cors = require("cors");
+const Movie = require("./models/Movie")
+
 
 mongoose
   .connect("mongodb://localhost/starter-code", { useNewUrlParser: true })
@@ -15,6 +17,7 @@ mongoose
       `Connected to Mongo! Database name: "${x.connections[0].name}"`
     );
   })
+
   .catch((err) => {
     console.error("Error connecting to mongo", err);
   });
@@ -24,7 +27,40 @@ const debug = require("debug")(
   `${app_name}:${path.basename(__filename).split(".")[0]}`
 );
 
+// .then(() => {
+//   Movie.create({
+//     title: "Shitty Movie with a Twist",
+//     director: "M. Night Shamalan",
+//   })
+// })
+
+
 const app = express();
+
+app.listen(3000, () => {
+  console.log("Webserver running");
+});
+
+app.get("/movies", (req, res) => {
+  Movie.find({})
+    .then((movies) => {
+      res.json(movies);
+    })
+});
+
+app.get("/movies/:id", (req, res) => {
+  Movie.findById(req.params.id)
+    .then((movie) => {
+      res.json(movie);
+    })
+});
+
+app.post("/movies", (req, res) => {
+  Movie.create(req.body)
+    .then((movie) => {
+      res.send('New Movie Added!');
+    })
+});
 
 // Middleware Setup
 app.use(cors());
