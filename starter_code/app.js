@@ -62,6 +62,13 @@ app.post("/movies", (req, res) => {
     })
 });
 
+// app.put("/movies", (req, res) => {
+//   Movie.read(req.body)
+//   .then((movie) => {
+//     res.send('Movie Updated!');
+//   })
+// });
+
 // Middleware Setup
 app.use(cors());
 app.use(logger("dev"));
